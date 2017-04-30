@@ -1,25 +1,36 @@
 <template>
-	<div class="sign-in-page">
-		<div class="row">
-		<div class="input-field col s6">
-			<input id="username" type="text" class="validate"></input>
-			<label for="username">user name</label>
-		</div>
-	</div>
-	<div class="row">
-		<div class="input-field col s6">
-			<input id="password" type="text" class="validate"></input>
-			<label for="password">password</label>
-		</div>
-	</div>
-	</div>
+	<md-card id="signin-card">
+	<form id="signin-form" novalidate @submit.stop.prevent="">
+		<span id="headline" class="md-headline">登陆</span>
+		<md-input-container>
+			<label>用户名</label>
+			<md-input required></md-input>
+		</md-input-container>
+		<md-input-container>
+			<label>密码</label>
+			<md-input required></md-input>
+		</md-input-container>
+		<md-button class="md-raised md-primary">登陆</md-button>
+	</form>
+</md-card>
 </template>
 
 <script>
-	import 'materialize'
-
 	export default {
 	}
 </script>
 
-<style scoped></style>
+<style scoped>
+	#signin-card {
+		width: 50%;
+		min-width: 280px;
+		margin: auto;
+		padding: 32px;
+		margin-top: 32px;
+	}
+	#signin-form {
+	}
+	#headline {
+		margin-bottom: 16px;
+	}
+</style>
