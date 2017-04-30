@@ -10,7 +10,7 @@
 			<label>密码</label>
 			<md-input required></md-input>
 		</md-input-container>
-		<md-button class="md-raised md-primary">登陆</md-button>
+		<md-button id="signin-button" class="md-raised md-primary">登陆</md-button>
 	</form>
 </md-card>
 </template>
@@ -22,13 +22,12 @@
 
 <style scoped>
 	#signin-card {
-		width: 50%;
-		min-width: 280px;
-		margin: auto;
-		padding: 32px;
-		margin-top: 32px;
+		width: 320px;
+		margin: 32px auto;
+		padding: 24px 48px;
 	}
-	#signin-form {
+	#signin-button {
+		margin: 16px 0;
 	}
 	#headline {
 		margin-bottom: 16px;

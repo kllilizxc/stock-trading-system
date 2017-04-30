@@ -8,7 +8,7 @@
       <md-input :required="field.required"></md-input>
     </md-input-container>
     </div>
-    <md-button class="md-raised md-primary">注册</md-button>
+    <md-button id="signup-button" class="md-raised md-primary">注册</md-button>
   </form>
 </md-card>
 </template>
@@ -37,13 +37,13 @@
 
 <style scoped>
   #signup-card {
-    width: 70%;
-    min-width: 280px;
-    margin: auto;
-    padding: 32px;
+    width: 500px;
+    margin: 32px auto;
+    padding: 24px 48px;
     margin-top: 32px;
   }
-  #signup-form {
+  #signup-button {
+    margin: 16px 0;
   }
   #headline {
     margin-bottom: 16px;
