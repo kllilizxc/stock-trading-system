@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
+import Search from '@/components/Search'
+import Deal from '@/components/Deal'
+import Record from '@/components/Record'
 
 Vue.use(Router)
 
@@ -10,8 +12,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      redirect: '/Search'
     },
     {
       path: '/SignIn',
@@ -22,6 +23,21 @@ export default new Router({
       path: '/SignUp',
       name: 'SignUp',
       component: SignUp
+    },
+    {
+      path: '/Search',
+      name: 'Search',
+      component: Search
+    },
+    {
+      path: '/Deal',
+      name: 'Deal',
+      component: Deal
+    },
+    {
+      path: '/Record',
+      name: 'Record',
+      component: Record
     }
   ]
 })

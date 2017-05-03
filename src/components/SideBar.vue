@@ -14,8 +14,10 @@
       </div>
       <md-list>
         <md-list-item v-for="link in links">
-          <md-icon>{{ link.icon }}</md-icon>
-          <span>{{ link.text }}</span>
+          <router-link :to="link.to" @click.native="toggleSideNav">
+            <md-icon>{{ link.icon }}</md-icon>
+            <span>{{ link.text }}</span>
+          </router-link>
         </md-list-item>
       </md-list>
     </md-sidenav>
@@ -28,9 +30,9 @@
     data () {
       return {
         links: [
-          { icon: 'home', text: '查询' },
-          { icon: 'home', text: '交易' },
-          { icon: 'home', text: '流水记录' }
+          { icon: 'search', text: '查询', to: '/Search' },
+          { icon: 'shopping', text: '交易', to: '/Deal' },
+          { icon: 'subject', text: '流水记录', to: '/Record' }
         ]
       }
     },
