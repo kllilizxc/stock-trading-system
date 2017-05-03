@@ -10,6 +10,9 @@
 			<label>密码</label>
 			<md-input required></md-input>
 		</md-input-container>
+		<router-link to="/SignUp">
+			<md-button id="signup-button" class="md-raised md-primary">注册</md-button>
+		</router-link>
 		<md-button id="signin-button" class="md-raised md-primary">登陆</md-button>
 	</form>
 </md-card>
@@ -26,8 +29,8 @@
 		margin: 32px auto;
 		padding: 24px 48px;
 	}
-	#signin-button {
-		margin: 16px 0;
+	#signin-button, #signup-button {
+		margin: 16px 8px;
 	}
 	#headline {
 		margin-bottom: 16px;

@@ -37,7 +37,7 @@
 
 <style scoped>
   #signup-card {
-    width: 500px;
+    width: 460px;
     margin: 32px auto;
     padding: 24px 48px;
     margin-top: 32px;
