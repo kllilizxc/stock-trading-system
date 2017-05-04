@@ -5,7 +5,7 @@
     <div v-for="field in fields">
       <md-input-container>
       <label>{{field.name}}</label>
-      <md-input :required="field.required"></md-input>
+      <md-input :required="field.required" v-model="field.message" id="field.line"></md-input>
     </md-input-container>
     </div>
     <md-button id="signup-button" class="md-raised md-primary">注册</md-button>
@@ -26,8 +26,7 @@
           { name: '电话', required: true },
           { name: '姓名', required: true },
           { name: '性别', required: true },
-          { name: '关注股票ID', required: true },
-          { name: '证券账户', required: false },
+          { name: '资金账户', required: false },
           { name: '家庭地址', required: false }
         ]
       }
@@ -41,6 +40,9 @@
     margin: 32px auto;
     padding: 24px 48px;
     margin-top: 32px;
+  }
+  #field.name[1]{
+  width: 230px;
   }
   #signup-button {
     margin: 16px 0;
