@@ -5,6 +5,7 @@ import SignUp from '@/components/SignUp'
 import Search from '@/components/Search'
 import Deal from '@/components/Deal'
 import Record from '@/components/Record'
+import Profile from '@/components/Profile'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/Record',
       name: 'Record',
       component: Record
+    },
+    {
+      path: '/Profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })
