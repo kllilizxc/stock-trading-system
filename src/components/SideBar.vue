@@ -19,7 +19,7 @@
         </router-link>
       </div>
       <md-list>
-        <md-list-item v-for="link in links">
+        <md-list-item v-for="link in links" :key="link.to">
           <router-link :to="link.to" @click.native="toggleSideNav">
             <md-icon>{{ link.icon }}</md-icon>
             <span>{{ link.text }}</span>
@@ -34,7 +34,7 @@
   import $ from 'jquery'
 
   export default {
-    name: 'sidebar',
+    name: 'SideBar',
     data () {
       return {
         username: '',
@@ -50,20 +50,20 @@
         this.$refs.sideBar.toggle()
       },
       updateUser () {
-        console.log('update-user')
         $.get('/userInfo', result => {
           if (result.code) {
             let info = result.result[0]
 
             this.username = info.usrname
+          } else {
+            this.username = ''
           }
         })
       }
     },
-    mounted () {
+    created () {
       this.updateUser()
 
-      console.log(this.$root)
       this.$root.$on('update-user', this.updateUser)
     }
   }

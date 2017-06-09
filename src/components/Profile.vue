@@ -7,58 +7,63 @@
       </md-avatar> -->
       <md-layout :md-gutter="16">
         <md-layout>
-          <md-input-container>
+          <md-input-container :class="{'md-input-invalid': errors.has('actualName')}">
             <label>{{actualName.name}}</label>
-            <md-input v-model="actualName.value"></md-input>
+            <md-input data-vv-name="actualName" v-model="actualName.value" v-validate="'max:20'"></md-input>
+            <span v-show="errors.has('actualName')" class="md-error">{{ errors.first('actualName') }}</span>
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container :class="{'md-input-invalid': errors.has('idNumber')}">
             <label>{{idNumber.name}}</label>
-            <md-input v-model="idNumber.value"></md-input>
+            <md-input data-vv-name="idNumber" v-model="idNumber.value" v-validate="'digits:18'"></md-input>
+            <span v-show="errors.has('idNumber')" class="md-error">{{ errors.first('idNumber') }}</span>
           </md-input-container>
         </md-layout>
       </md-layout>
       <md-layout :md-gutter="16">
         <md-layout>
-          <md-input-container>
+          <md-input-container :class="{'md-input-invalid': errors.has('phone')}">
             <label>{{phone.name}}</label>
-            <md-input v-model="phone.value"></md-input>
+            <md-input data-vv-name="phone" v-model="phone.value" v-validate data-vv-rules="max:20"></md-input>
+            <span v-show="errors.has('phone')" class="md-error">{{ errors.first('phone') }}</span>
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container :class="{'md-input-invalid': errors.has('stockAccount')}">
             <label>{{stockAccount.name}}</label>
-            <md-input v-model="stockAccount.value"></md-input>
+            <md-input data-vv-name="stockAccount" v-model="stockAccount.value" v-validate data-vv-rules="alpha_num|max:20|min:6"></md-input>
+            <span v-show="errors.has('stockAccount')" class="md-error">{{ errors.first('stockAccount') }}</span>
           </md-input-container>
         </md-layout>
       </md-layout>
       <md-layout :md-gutter="16">
         <md-layout>
-            <md-input-container>
-              <label>{{familyAddress.name}}</label>
-              <md-input v-model="familyAddress.value"></md-input>
-            </md-input-container>
-          </md-layout>
-        </md-layout>
-      </md-layout>
-      <md-layout :md-gutter="16">
-        <md-layout>
-          <md-input-container>
-            <label>{{totalFund.name}}</label>
-            <md-input v-model="totalFund.value" disabled></md-input>
-          </md-input-container>
-        </md-layout>
-        <md-layout>
-          <md-input-container>
-            <label>{{totalStock.name}}</label>
-            <md-input v-model="totalStock.value" disabled></md-input>
+          <md-input-container :class="{'md-input-invalid': errors.has('familyAddress')}">
+            <label>{{familyAddress.name}}</label>
+            <md-input data-vv-name="familyAddress" v-model="familyAddress.value" v-validate data-vv-rules="max:20"></md-input>
+            <span v-show="errors.has('familyAddress')" class="md-error">{{ errors.first('familyAddress') }}</span>
           </md-input-container>
         </md-layout>
       </md-layout>
-      <md-button id="update-button" class="md-raised md-primary" type="submit">更新</md-button>
-    </form>
-  </md-card>
+    </md-layout>
+    <md-layout :md-gutter="16">
+      <md-layout>
+        <md-input-container>
+          <label>{{totalFund.name}}</label>
+          <md-input v-model="totalFund.value" disabled></md-input>
+        </md-input-container>
+      </md-layout>
+      <md-layout>
+        <md-input-container>
+          <label>{{totalStock.name}}</label>
+          <md-input v-model="totalStock.value" disabled></md-input>
+        </md-input-container>
+      </md-layout>
+    </md-layout>
+    <md-button id="update-button" class="md-raised md-primary" type="submit">更新</md-button>
+  </form>
+</md-card>
 </template>
 
 <script>
@@ -79,22 +84,26 @@
     },
     methods: {
       update () {
-        $.post('/userInfo', {
-          name: this.actualName.value,
-          idnum: this.idNumber.value,
-          phone: this.phone.value,
-          accountName: this.stockAccount.value,
-          fmaddr: this.familyAddress.value
-        }, function (result) {
-          if (result.code) {
-            alert('更新成功!')
-          } else {
-            alert('更新失败! 原因: ' + result.err)
-          }
+        this.$validator.validateAll().then(() => {
+          $.post('/userInfo', {
+            name: this.actualName.value,
+            idnum: this.idNumber.value,
+            phone: this.phone.value,
+            accountName: this.stockAccount.value,
+            fmaddr: this.familyAddress.value
+          }, function (result) {
+            if (result.code) {
+              alert('更新成功!')
+            } else {
+              alert('更新失败! 原因: ' + result.err)
+            }
+          })
+        }).catch(() => {
+          alert('表单填写不正确！')
         })
       }
     },
-    mounted () {
+    created () {
       $.get('/userInfo', result => {
         if (result.code) {
           let info = result.result[0]

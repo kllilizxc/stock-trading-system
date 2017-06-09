@@ -2,13 +2,15 @@
   <md-card id="signin-card">
     <form id="signin-form" novalidate @submit.stop.prevent="signin">
       <span id="headline" class="md-headline">登陆</span>
-      <md-input-container>
+      <md-input-container :class="{'md-input-invalid': errors.has('username')}">
         <label>用户名</label>
-        <md-input required v-model="username"></md-input>
+        <md-input name="username" data-vv-name="username" v-model="username" v-validate data-vv-rules="required|alpha_num|max:20|min:6"></md-input>
+        <span v-show="errors.has('username')" class="md-error">{{ errors.first('username') }}</span>
       </md-input-container>
-      <md-input-container>
+      <md-input-container :class="{'md-input-invalid': errors.has('password')}">
         <label>密码</label>
-        <md-input required v-model="password"></md-input>
+        <md-input required data-vv-name="password" v-model="password" type="password" v-validate data-vv-rules="required|max:32|min:6" type="password"></md-input>
+        <span v-show="errors.has('password')" class="md-error">{{ errors.first('password') }}</span>
       </md-input-container>
       <router-link to="/SignUp">
         <md-button id="signup-button" class="md-raised md-primary">注册</md-button>
@@ -31,14 +33,18 @@
     },
     methods: {
       signin () {
-        $.post('/signin/' + this.username + '/' + this.password, data => {
-          if (data.code) {
-            alert('登录成功!')
-            this.$root.$emit('update-user')
-            this.$router.push({ name: 'Profile' })
-          } else {
-            alert('登录失败! 原因: ' + data.err)
-          }
+        this.$validator.validateAll().then(() => {
+          $.post('/signin/' + this.username + '/' + this.password, data => {
+            if (data.code) {
+              alert('登录成功!')
+              this.$root.$emit('update-user')
+              this.$router.push({ name: 'Profile' })
+            } else {
+              alert('登录失败! 原因: ' + data.err)
+            }
+          })
+        }).catch(() => {
+          alert('表单填写不正确！')
         })
       }
     }

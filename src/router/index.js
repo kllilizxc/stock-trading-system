@@ -36,6 +36,11 @@ export default new Router({
       component: Deal
     },
     {
+      path: '/Deal/:stockId',
+      name: 'DealWithId',
+      component: Deal
+    },
+    {
       path: '/Record',
       name: 'Record',
       component: Record

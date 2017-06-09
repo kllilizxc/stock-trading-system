@@ -1,67 +1,77 @@
 <template>
   <md-card id="signup-card">
-  <form id="signup-form" novalidate @submit.stop.prevent="signup">
-    <span id="headline" class="md-headline">注册</span>
-    <div v-for="field in fields">
-      <md-input-container>
-      <label>{{field.name}}</label>
-      <md-input :required="field.required" v-model="field.value"></md-input>
-    </md-input-container>
-    </div>
-    <md-button id="signup-button" class="md-raised md-primary" type="submit">注册</md-button>
-  </form>
-</md-card>
+    <form id="signup-form" novalidate @submit.stop.prevent="signup">
+      <span id="headline" class="md-headline">注册</span>
+      <div v-for="info in infos" :key="info.name">
+        <md-input-container :class="{'md-input-invalid': errors.has(info.name)}">
+          <label>{{info.name}}</label>
+          <md-input :required="info.required" :data-vv-name="info.name" v-model="info.value" v-validate :data-vv-rules="info.validate" type="info.type"></md-input>
+          <span v-show="errors.has(info.name)" class="md-error">{{ errors.first(info.name) }}</span>
+        </md-input-container>
+      </div>
+      <md-button id="signup-button" class="md-raised md-primary" type="submit">注册</md-button>
+    </form>
+  </md-card>
 </template>
 
 <script>
   import $ from 'jquery'
 
   export default {
-    name: 'Signup',
+    name: 'SignUp',
     data () {
       return {
-        fields: [
-          { name: '用户名', required: true, value: '' },
-          { name: '密码', required: true, value: '' },
-          { name: '重复密码', required: true, value: '' },
-          { name: 'Email', required: true, value: '' },
-          { name: '电话', required: true, value: '' },
-          { name: '姓名', required: true, value: '' },
-          { name: '性别', required: true, value: '' },
-          { name: '资金账户', required: false, value: '' },
-          { name: '家庭地址', required: false, value: '' }
+        infos: [
+        { name: '用户名', type: 'text', required: true, value: '', validate: 'required|alpha_num|max:20|min:6' },
+        { name: '密码', type: 'password', required: true, value: '', validate: 'required|max:32|min:6' },
+        { name: '重复密码', type: 'password', required: true, value: '', validate: 'required|max:32|min:6' },
+        { name: 'Email', type: 'email', required: true, value: '', validate: 'required|email|max:20' },
+        { name: '电话', type: 'phone', required: true, value: '', validate: 'required' },
+        { name: '姓名', type: 'text', required: true, value: '' },
+        { name: '性别', type: 'text', required: true, value: '', validate: 'max:20' },
+        { name: '资金账户', type: 'text', required: false, value: '', validate: 'alpha_num|max:20|min:6' },
+        { name: '家庭地址', type: 'text', required: false, value: '', validate: 'max:20' }
         ]
       }
     },
     computed: {
-      username () { return this.fields[0].value },
-      password () { return this.fields[1].value },
-      passwordRepeat () { return this.fields[2].value },
-      email () { return this.fields[3].value },
-      phone () { return this.fields[4].value },
-      realName () { return this.fields[5].value },
-      sex () { return this.fields[6].value },
-      accountName () { return this.fields[7].value },
-      familyAddr () { return this.fields[8].value }
+      username () { return this.infos[0].value },
+      password () { return this.infos[1].value },
+      passwordRepeat () { return this.infos[2].value },
+      email () { return this.infos[3].value },
+      phone () { return this.infos[4].value },
+      realName () { return this.infos[5].value },
+      sex () { return this.infos[6].value },
+      accountName () { return this.infos[7].value },
+      familyAddr () { return this.infos[8].value }
     },
     methods: {
       signup () {
-        $.post('/signup', {
-          username: this.username,
-          password: this.password,
-          email: this.email,
-          phone: this.phone,
-          realName: this.realName,
-          sex: this.sex,
-          accountName: this.accountName,
-          familyAddr: this.familyAddr
-        }, data => {
-          if (data.code) {
-            alert('注册成功!')
-            this.$router.push({ name: 'Profile' })
-          } else {
-            alert('注册失败！ 原因: ' + data.err)
+        this.$validator.validateAll().then(() => {
+          if (this.password !== this.passwordRepeat) {
+            alert('两次输入的密码不相等！')
+            return
           }
+          $.post('/signup', {
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            phone: this.phone,
+            realName: this.realName,
+            sex: this.sex,
+            accountName: this.accountName,
+            familyAddr: this.familyAddr
+          }, data => {
+            if (data.code) {
+              alert('注册成功!')
+              this.$root.$emit('update-user')
+              this.$router.push({ name: 'Profile' })
+            } else {
+              alert('注册失败！ 原因: ' + data.err)
+            }
+          })
+        }).catch(() => {
+          alert('表单填写不正确！')
         })
       }
     }
@@ -75,8 +85,8 @@
     padding: 24px 48px;
     margin-top: 32px;
   }
-  #field.name[1]{
-  width: 230px;
+  #info.name[1]{
+    width: 230px;
   }
   #signup-button {
     margin: 16px 0;

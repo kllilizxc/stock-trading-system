@@ -4,12 +4,12 @@
     <md-table>
       <md-table-header>
         <md-table-row>
-          <md-table-head v-for="field in fields">{{ field }}</md-table-head>
+          <md-table-head v-for="info in infos" :key="info">{{ info }}</md-table-head>
         </md-table-row>
       </md-table-header>
       <md-table-body>
-        <md-table-row v-for="row in rows">
-          <md-table-cell v-for="col in row">{{ col }}</md-table-cell>
+        <md-table-row v-for="row in rows" :key="row[0]">
+          <md-table-cell v-for="col in row" :key="col">{{ col }}</md-table-cell>
         </md-table-row>
       </md-table-body>
     </md-table>
@@ -20,11 +20,11 @@
   import $ from 'jquery'
 
   export default {
-    name: 'record',
+    name: 'Record',
     username: '',
     data () {
       return {
-        fields: [ '交易类型', '买/卖', '数量', '价格', '用户 ID', '股票 ID' ],
+        infos: [ '交易类型', '买/卖', '数量', '价格', '用户 ID', '股票 ID' ],
         rows: []
       }
     },
@@ -54,8 +54,8 @@
     //         for (let i = 0; i < records.length; i++) {
     //           let _row = []
 
-    //           for (let field in records[i]) {
-    //             _row.push(records[i][field])
+    //           for (let info in records[i]) {
+    //             _row.push(records[i][info])
     //           }
     //           _rows.push(_row)
     //           console.log(_rows)
@@ -89,7 +89,7 @@
             return
           }
           for (let i = 0; i < records.length; i++) {
-            let record = records[i];
+            let record = records[i]
             this.rows.push([
               this.getTypeType(record.type), this.getActionType(record.action), record.count, record.price, record.userId, record.stockId
             ])
