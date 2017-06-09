@@ -5,8 +5,14 @@
     </md-button>
     <md-sidenav class="md-left md-fixed" ref="sideBar">
       <div id="user-info">
-        <router-link to="/SignIn" @click.native="toggleSideNav">
+        <router-link to="/SignIn" @click.native="toggleSideNav" v-if="!username">
           <span id="user-name">登陆</span>
+          <md-avatar id="user-avatar" class="md-large">
+            <img/>
+          </md-avatar>
+        </router-link>
+        <router-link to="/Profile" @click.native="toggleSideNav" v-else>
+          <span id="user-name">{{ username }}</span>
           <md-avatar id="user-avatar" class="md-large">
             <img src="//placeimg.com/40/40/people/1" />
           </md-avatar>
@@ -25,10 +31,13 @@
 </template>
 
 <script>
+  import $ from 'jquery'
+
   export default {
     name: 'sidebar',
     data () {
       return {
+        username: '',
         links: [
           { icon: 'search', text: '查询', to: '/Search' },
           { icon: 'shopping', text: '交易', to: '/Deal' },
@@ -39,7 +48,23 @@
     methods: {
       toggleSideNav () {
         this.$refs.sideBar.toggle()
+      },
+      updateUser () {
+        console.log('update-user')
+        $.get('/userInfo', result => {
+          if (result.code) {
+            let info = result.result[0]
+
+            this.username = info.usrname
+          }
+        })
       }
+    },
+    mounted () {
+      this.updateUser()
+
+      console.log(this.$root)
+      this.$root.$on('update-user', this.updateUser)
     }
   }
 </script>
@@ -70,5 +95,9 @@
     position: absolute;
     top: 128px;
     left: 96px;
+  }
+
+  img {
+    background-color: #bbb;
   }
 </style>

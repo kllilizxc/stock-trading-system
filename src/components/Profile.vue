@@ -1,6 +1,6 @@
 <template>
   <md-card id="profile-card">
-    <form id="profile-form" novalidate @submit.stop.prevent="">
+    <form id="profile-form" novalidate @submit.stop.prevent="update">
       <span id="headline" class="md-headline">个人资料</span>
       <!-- <md-avatar class="md-large">
         <img src="//placeimg.com/40/40/people/1" />
@@ -56,24 +56,59 @@
           </md-input-container>
         </md-layout>
       </md-layout>
-      <md-button id="update-button" class="md-raised md-primary">更新</md-button>
+      <md-button id="update-button" class="md-raised md-primary" type="submit">更新</md-button>
     </form>
   </md-card>
 </template>
 
 <script>
+  import $ from 'jquery'
+
   export default {
     name: 'Profile',
     data () {
       return {
-        actualName: { name: '真实姓名', value: 'Mr. Z' },
-        idNumber: { name: '身份证', value: '23214124343' },
-        phone: { name: '电话号码', value: '17816812345' },
-        stockAccount: { name: '资金账户', value: '2138243289438242' },
+        actualName: { name: '真实姓名', value: '' },
+        idNumber: { name: '身份证', value: '' },
+        phone: { name: '电话号码', value: '' },
+        stockAccount: { name: '资金账户', value: '' },
         familyAddress: { name: '家庭住址', value: '' },
         totalFund: { name: '资金总额', value: 0 },
         totalStock: { name: '股票总额', value: 0 }
       }
+    },
+    methods: {
+      update () {
+        $.post('/userInfo', {
+          name: this.actualName.value,
+          idnum: this.idNumber.value,
+          phone: this.phone.value,
+          accountName: this.stockAccount.value,
+          fmaddr: this.familyAddress.value
+        }, function (result) {
+          if (result.code) {
+            alert('更新成功!')
+          } else {
+            alert('更新失败! 原因: ' + result.err)
+          }
+        })
+      }
+    },
+    mounted () {
+      $.get('/userInfo', result => {
+        if (result.code) {
+          let info = result.result[0]
+
+          this.stockAccount.value = info.accountname
+          this.familyAddress.value = info.fmaddr
+          this.idNumber.value = info.idnum
+          this.actualName.value = info.name
+          this.phone.value = info.phone
+        } else {
+          alert('Please login first!')
+          this.$router.push({ name: 'SignIn' })
+        }
+      })
     }
   }
 </script>
