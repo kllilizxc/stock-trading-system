@@ -9,7 +9,7 @@
       </md-input-container>
       <md-input-container :class="{'md-input-invalid': errors.has('password')}">
         <label>密码</label>
-        <md-input required data-vv-name="password" v-model="password" type="password" v-validate data-vv-rules="required|max:32|min:6" type="password"></md-input>
+        <md-input required data-vv-name="password" v-model="password" type="password" v-validate data-vv-rules="required|max:32|min:6"></md-input>
         <span v-show="errors.has('password')" class="md-error">{{ errors.first('password') }}</span>
       </md-input-container>
       <router-link to="/SignUp">
@@ -35,10 +35,10 @@
       signin () {
         this.$validator.validateAll().then(() => {
           $.post('/signin/' + this.username + '/' + this.password, data => {
-            if (data.code) {
+            if (data.code || data.result.length === 0) {
               alert('登录成功!')
               this.$root.$emit('update-user')
-              this.$router.push({ name: 'Profile' })
+              this.$router.push({ name: 'Welcome' })
             } else {
               alert('登录失败! 原因: ' + data.err)
             }

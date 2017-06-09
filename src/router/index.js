@@ -10,7 +10,8 @@ import Profile from '@/components/Profile'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
+  routes:
+  [
     {
       path: '/',
       redirect: '/Search'
@@ -28,7 +29,14 @@ export default new Router({
     {
       path: '/Search',
       name: 'Search',
-      component: Search
+      component: Search,
+      children: [
+        {
+          path: 'Welcome',
+          name: 'Welcome',
+          component: Record
+        }
+      ]
     },
     {
       path: '/Deal',

@@ -81,7 +81,10 @@
       })
     },
     created () {
-      $.get('/records/' + this.username, result => {
+      $.get('/stocksHold', result => {
+        console.log('result:')
+        console.log(result)
+
         if (result.code === 1) {
           let records = result.result
 
@@ -90,6 +93,7 @@
           }
           for (let i = 0; i < records.length; i++) {
             let record = records[i]
+            console.log(record)
             this.rows.push([
               this.getTypeType(record.type), this.getActionType(record.action), record.count, record.price, record.userId, record.stockId
             ])

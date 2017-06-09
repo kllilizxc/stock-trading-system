@@ -5,7 +5,7 @@
       <div v-for="info in infos" :key="info.name">
         <md-input-container :class="{'md-input-invalid': errors.has(info.name)}">
           <label>{{info.name}}</label>
-          <md-input :required="info.required" :data-vv-name="info.name" v-model="info.value" v-validate :data-vv-rules="info.validate" type="info.type"></md-input>
+          <md-input :required="info.required" :data-vv-name="info.name" v-model="info.value" v-validate :data-vv-rules="info.validate" :type="info.type"></md-input>
           <span v-show="errors.has(info.name)" class="md-error">{{ errors.first(info.name) }}</span>
         </md-input-container>
       </div>
